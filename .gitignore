@@ -56,3 +56,4 @@ site
 
 # build cache
 .webpack-cache
+/.idea/

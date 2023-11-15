@@ -19,6 +19,8 @@ import { TechDocsAddons } from '@backstage/plugin-techdocs-react';
 
 import { ScalprumProvider } from '@scalprum/react-core';
 
+import { MtaPage } from '@janus-idp/plugin-mta';
+
 import { apis } from './apis';
 import { entityPage } from './components/catalog/EntityPage';
 import { Root } from './components/Root';
@@ -73,6 +75,7 @@ export const AppBase = () => {
                 element={<Component {...props} />}
               />
             ))}
+            <Route path="/mta" element={<MtaPage />} />
           </FlatRoutes>
         </Root>
       </AppRouter>
