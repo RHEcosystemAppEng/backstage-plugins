@@ -3,6 +3,7 @@ import {
   createRoutableExtension,
 } from '@backstage/core-plugin-api';
 
+import { ApplicationInventory } from './components/ApplicationInventory  ';
 import { rootRouteRef } from './routes';
 
 export const mtaPlugin = createPlugin({
@@ -16,7 +17,9 @@ export const MtaPage = mtaPlugin.provide(
   createRoutableExtension({
     name: 'MtaPage',
     component: () =>
-      import('./components/ExampleComponent').then(m => m.ExampleComponent),
+      import('./components/ApplicationInventory  ').then(
+        m => m.ApplicationInventory,
+      ),
     mountPoint: rootRouteRef,
   }),
 );

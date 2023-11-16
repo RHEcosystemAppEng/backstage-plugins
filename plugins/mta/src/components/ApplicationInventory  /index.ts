@@ -1,0 +1,1 @@
+export { ApplicationInventory } from './ApplicationInventory';
