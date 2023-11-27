@@ -1,32 +1,41 @@
 import React from 'react';
 import useAsync from 'react-use/lib/useAsync';
 
-import { Table } from '@backstage/core-components';
-import { configApiRef, useApi } from '@backstage/core-plugin-api';
+import { Link, Table, TableColumn } from '@backstage/core-components';
+import { useApi } from '@backstage/core-plugin-api';
 
 import { Box, Grid, Typography } from '@material-ui/core';
 
-import { Columns, Data } from './tableHeading';
+import { mtaApiRef } from '../../api';
+import { Application } from '../../types';
 
 export const ApplicationInventory = () => {
-  const config = useApi(configApiRef);
-  const BACKEND_URL = 'backend.baseUrl';
+  const mtaClient = useApi(mtaApiRef);
 
-  const { loading: isSysInfoLoading, value: sysInfoData } =
-    useAsync(async (): Promise<Data> => {
-      const backendUrl = config.getString(BACKEND_URL);
-      // TODO: Update the URL to match the new MTA client's backend .
-      const backendApiEndPoint = `${backendUrl}/hub/applications`;
-      const applicationInventory = await fetch(backendApiEndPoint)
-        .then(res => (res.ok ? res : Promise.reject(res)))
-        .then(res => res.json());
-
-      // To display the main data in a table, prepare the array to contain the ONLY data we have
-      applicationInventory.mainDataAsArray = [];
-      applicationInventory.mainDataAsArray[0] = applicationInventory.data;
-
-      return applicationInventory;
+  const { loading: isApplicationsLoading, value: applicationData } =
+    useAsync(async (): Promise<Application[]> => {
+      return await mtaClient.getApplications();
     }, []);
+
+  const Columns: TableColumn[] = [
+    { title: 'Name', field: 'name', highlight: true },
+    { title: 'Description', field: 'description', highlight: true },
+    { title: 'Business Service', field: 'businessService', highlight: true },
+    { title: 'Repository Kind', field: 'repository.kind', highlight: true },
+    { title: 'Repository URL', field: 'repository.url', highlight: true },
+    { title: 'Repository Branch', field: 'repository.branch', highlight: true },
+    { title: 'Repository Path', field: 'repository.path', highlight: true },
+    { title: 'Creating User', field: 'createUser', highlight: true },
+    {
+      title: 'Report',
+      field: 'report',
+      highlight: true,
+      render: (rowData: any): React.ReactNode => {
+        const app = rowData as Application;
+        return <Link to={`${app.report}`}>Report</Link>;
+      },
+    },
+  ];
 
   return (
     <>
@@ -35,11 +44,11 @@ export const ApplicationInventory = () => {
           <Table
             title="Application Inventory"
             columns={Columns}
-            isLoading={isSysInfoLoading}
-            data={sysInfoData?.dataAsArray || []}
+            isLoading={isApplicationsLoading}
+            data={applicationData || []}
             options={{
               padding: 'dense',
-              pageSize: 1,
+              pageSize: 100,
               emptyRowsWhenPaging: false,
               search: false,
             }}
