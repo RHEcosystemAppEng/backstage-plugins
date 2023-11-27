@@ -59,6 +59,18 @@ proxy:
     # Change to "false" in case of using self hosted quay instance with a self-signed certificate
     secure: true
 
+  '/mta/api':
+    target: 'https://mta-openshift-mta.apps.rhdh-dev01.kni.syseng.devcluster.openshift.com'
+    allowedMethods: ['GET', 'POST', 'PUT']
+    allowedHeaders: ['Authorization', 'XMLHttpRequest']
+    headers:
+      X-Requested-With: 'XMLHttpRequest'
+      # Uncomment the following line to access a private Quay Repository using a token
+      Authorization: 'Bearer <YOUR TOKEN>'
+    changeOrigin: true
+    # Change to "false" in case of using self hosted quay instance with a self-signed certificate
+    secure: false
+
 quay:
   uiUrl: 'https://quay.io'
 
