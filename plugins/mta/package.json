@@ -46,6 +46,16 @@
     "msw": "^1.0.0"
   },
   "files": [
-    "dist"
-  ]
+    "dist",
+    "dist-scalprum",
+    "config.d.ts"
+  ],
+  "configSchema": "config.d.ts",
+  "repository": "github:janus-idp/backstage-plugins",
+  "keywords": [
+    "backstage",
+    "plugin"
+  ],
+  "homepage": "https://janus-idp.io/",
+  "bugs": "https://github.com/janus-idp/backstage-plugins/issues"
 }

@@ -65,14 +65,16 @@ proxy:
     allowedHeaders: ['Authorization', 'XMLHttpRequest']
     headers:
       X-Requested-With: 'XMLHttpRequest'
-      # Uncomment the following line to access a private Quay Repository using a token
-      Authorization: 'Bearer <YOUR TOKEN>'
+      Authorization: 'Bearer <MTA TOKEN>'
     changeOrigin: true
-    # Change to "false" in case of using self hosted quay instance with a self-signed certificate
+    # Change to "false" in case of using self hosted mta instance with a self-signed certificate
     secure: false
 
 quay:
   uiUrl: 'https://quay.io'
+
+mta:
+  uiUrl: 'https://mta-openshift-mta.apps.rhdh-dev01.kni.syseng.devcluster.openshift.com'
 
 # Reference documentation http://backstage.io/docs/features/techdocs/configuration
 # Note: After experimenting with basic setup, use CI/CD to generate docs
