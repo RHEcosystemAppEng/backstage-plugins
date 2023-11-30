@@ -12,7 +12,7 @@ import { MtaApiClient, mtaApiRef } from './api';
 import { rootRouteRef, tagRouteRef } from './routes';
 
 export const mtaPlugin = createPlugin({
-  id: 'quay',
+  id: 'mta',
   routes: {
     root: rootRouteRef,
     tag: tagRouteRef,
