@@ -62,13 +62,13 @@ export class MtaApiClient implements MtaApiV1 {
 
   async getApplications() {
     const proxyUrl = await this.getBaseUrl();
-
+    const mtaUiUrl = this.configApi.getString('mta.uiUrl');
     const applications = (await this.fetcher(
       `${proxyUrl}/hub/applications`,
     )) as Application[];
 
     for (const app of applications) {
-      app.report = `https://mta-openshift-mta.apps.rhdh-dev01.kni.syseng.devcluster.openshift.com/hub/applications/${app.id}/bucket/windup/report/`;
+      app.report = `${mtaUiUrl}/hub/applications/${app.id}/bucket/windup/report/`;
     }
 
     return applications;

@@ -8,11 +8,10 @@ import {
 } from '@backstage/core-plugin-api';
 
 import { MtaApiClient, mtaApiRef } from './api';
-// import { ApplicationInventory } from './components/ApplicationInventory  ';
 import { rootRouteRef, tagRouteRef } from './routes';
 
 export const mtaPlugin = createPlugin({
-  id: 'quay',
+  id: 'mta',
   routes: {
     root: rootRouteRef,
     tag: tagRouteRef,
