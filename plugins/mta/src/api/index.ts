@@ -70,26 +70,17 @@ export class MtaApiClient implements MtaApiV1 {
     data: any,
     expectedResponseStatus: number,
   ) {
-    const { token: idToken } = await this.identityApi.getCredentials();
-    const response = await fetch(url, {
-      method: method,
-      body: JSON.stringify(data),
-      headers: {
-        'Content-Type': 'application/json',
-        Accept: 'application/json',
-        ...(idToken && { Authorization: `Bearer ${idToken}` }),
-      },
-    });
-    if (!response.ok || response.status !== expectedResponseStatus) {
-      throw new Error(
-        `failed to fetch data, status ${response.status}: ${response.statusText}`,
-      );
-    }
+    const response = await this.performRestCallInternal(
+      url,
+      method,
+      data,
+      expectedResponseStatus,
+    );
 
     return await response.json();
   }
 
-  private async submitTaskGroupCall(
+  private async performRestCallInternal(
     url: string,
     method: string,
     data: any,
@@ -110,6 +101,22 @@ export class MtaApiClient implements MtaApiV1 {
         `failed to fetch data, status ${response.status}: ${response.statusText}`,
       );
     }
+
+    return response;
+  }
+
+  private async submitTaskGroupCall(
+    url: string,
+    method: string,
+    data: any,
+    expectedResponseStatus: number,
+  ) {
+    await this.performRestCallInternal(
+      url,
+      method,
+      data,
+      expectedResponseStatus,
+    );
   }
 
   async getApplications() {

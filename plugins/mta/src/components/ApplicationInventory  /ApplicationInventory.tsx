@@ -1,20 +1,47 @@
 import React from 'react';
 
-import { Link, Progress, Table, TableColumn } from '@backstage/core-components';
+import { Link, Progress, Table } from '@backstage/core-components';
 
 import { Grid } from '@material-ui/core';
 
-import { useApplications } from '../../hooks';
-import { columns, useStyles } from './tableHeading';
+import { useApplications, useTaskGroups, useTasks } from '../../hooks';
+import {
+  columns,
+  taskColumns,
+  taskGroupColumns,
+  useStyles,
+} from './tableHeading';
+
+// import {Application} from "../../types";
+// import {useApi} from "@backstage/core-plugin-api";
+// import {mtaApiRef} from "../../api";
 
 export const ApplicationInventory = () => {
-  const mtaClient = useApi(mtaApiRef);
   const classes = useStyles();
 
   const { isApplicationsLoading, applicationData } = useApplications();
+  const { isTaskGroupsApplicationsLoading, taskGroupsData } = useTaskGroups();
+  const { isTasksLoading, tasksData } = useTasks();
+
   if (isApplicationsLoading) {
     return (
       <div data-testid="mta-application-progress">
+        <Progress />
+      </div>
+    );
+  }
+
+  if (isTaskGroupsApplicationsLoading) {
+    return (
+      <div data-testid="mta-task-groups-progress">
+        <Progress />
+      </div>
+    );
+  }
+
+  if (isTaskGroupsApplicationsLoading) {
+    return (
+      <div data-testid="mta-task-groups-progress">
         <Progress />
       </div>
     );
@@ -44,7 +71,7 @@ export const ApplicationInventory = () => {
           />
           <Table
             title="Application TaskGroups"
-            columns={TaskGroupColumns}
+            columns={taskGroupColumns}
             isLoading={isTaskGroupsApplicationsLoading}
             data={taskGroupsData || []}
             options={{
@@ -62,7 +89,7 @@ export const ApplicationInventory = () => {
           />
           <Table
             title="Application Tasks"
-            columns={TaskColumns}
+            columns={taskColumns}
             isLoading={isTasksLoading}
             data={tasksData || []}
             options={{

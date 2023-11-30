@@ -1,24 +1,9 @@
-import React, { useMemo, useState } from 'react';
 import { useAsync } from 'react-use';
 
-import { configApiRef, useApi } from '@backstage/core-plugin-api';
-
-import { Box, Chip, makeStyles } from '@material-ui/core';
+import { useApi } from '@backstage/core-plugin-api';
 
 import { mtaApiRef } from '../api';
-import { useStyles } from '../components/ApplicationInventory  /tableHeading';
-import { Application } from '../types';
-
-const useLocalStyles = makeStyles({
-  chip: {
-    margin: 0,
-    marginRight: '.2em',
-    height: '1.5em',
-    '& > span': {
-      padding: '.3em',
-    },
-  },
-});
+import { Application, Task, TaskGroup } from '../types';
 
 export const useApplications = () => {
   const mtaClient = useApi(mtaApiRef);
@@ -28,4 +13,24 @@ export const useApplications = () => {
     }, []);
 
   return { isApplicationsLoading, applicationData };
+};
+
+export const useTaskGroups = () => {
+  const mtaClient = useApi(mtaApiRef);
+  const { loading: isTaskGroupsApplicationsLoading, value: taskGroupsData } =
+    useAsync(async (): Promise<TaskGroup[]> => {
+      return await mtaClient.getTaskGroups();
+    }, []);
+
+  return { isTaskGroupsApplicationsLoading, taskGroupsData };
+};
+
+export const useTasks = () => {
+  const mtaClient = useApi(mtaApiRef);
+  const { loading: isTasksLoading, value: tasksData } =
+    useAsync(async (): Promise<Task[]> => {
+      return await mtaClient.getTasks();
+    }, []);
+
+  return { isTasksLoading, tasksData };
 };
