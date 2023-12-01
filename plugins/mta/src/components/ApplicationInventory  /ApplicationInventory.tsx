@@ -2,19 +2,21 @@ import React from 'react';
 
 import { Link, Progress, Table } from '@backstage/core-components';
 
-import { Grid } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 
-import { useApplications, useTaskGroups, useTasks } from '../../hooks';
 import {
-  columns,
+  useApplications,
+  useRunAnalysis,
+  useTaskGroups,
+  useTasks,
+} from '../../hooks';
+import { Application } from '../../types';
+import {
+  applicationColumns,
   taskColumns,
   taskGroupColumns,
   useStyles,
 } from './tableHeading';
-
-// import {Application} from "../../types";
-// import {useApi} from "@backstage/core-plugin-api";
-// import {mtaApiRef} from "../../api";
 
 export const ApplicationInventory = () => {
   const classes = useStyles();
@@ -22,6 +24,7 @@ export const ApplicationInventory = () => {
   const { isApplicationsLoading, applicationData } = useApplications();
   const { isTaskGroupsApplicationsLoading, taskGroupsData } = useTaskGroups();
   const { isTasksLoading, tasksData } = useTasks();
+  const { runAnalysis } = useRunAnalysis();
 
   if (isApplicationsLoading) {
     return (
@@ -46,6 +49,24 @@ export const ApplicationInventory = () => {
       </div>
     );
   }
+
+  const analyseColumn = {
+    title: 'Analyse',
+    field: 'analyse',
+    highlight: true,
+    render: rowData => {
+      const app = rowData as Application;
+      return (
+        <div>
+          <Button onClick={e => runAnalysis(e, app)} variant="contained">
+            Analyze
+          </Button>
+        </div>
+      );
+    },
+  };
+
+  const columns = [...applicationColumns, analyseColumn];
 
   return (
     <>
