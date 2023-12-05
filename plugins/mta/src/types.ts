@@ -16,6 +16,8 @@ export interface Application {
   owner: string | null;
   contributors: string[];
   migrationWave: string | null;
+
+  reportStatus: string | null;
   report: string | null;
 }
 

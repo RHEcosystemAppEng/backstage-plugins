@@ -22,7 +22,6 @@ export const ApplicationInventory = () => {
   const classes = useStyles();
 
   const { isApplicationsLoading, applicationData } = useApplications();
-  const { isTaskGroupsApplicationsLoading, taskGroupsData } = useTaskGroups();
   const { isTasksLoading, tasksData } = useTasks();
   const { runAnalysis } = useRunAnalysis();
 
@@ -34,17 +33,9 @@ export const ApplicationInventory = () => {
     );
   }
 
-  if (isTaskGroupsApplicationsLoading) {
+  if (isTasksLoading) {
     return (
-      <div data-testid="mta-task-groups-progress">
-        <Progress />
-      </div>
-    );
-  }
-
-  if (isTaskGroupsApplicationsLoading) {
-    return (
-      <div data-testid="mta-task-groups-progress">
+      <div data-testid="mta-task-progress">
         <Progress />
       </div>
     );
@@ -58,7 +49,11 @@ export const ApplicationInventory = () => {
       const app = rowData as Application;
       return (
         <div>
-          <Button onClick={e => runAnalysis(e, app)} variant="contained">
+          <Button
+            color="primary"
+            onClick={e => runAnalysis(e, app)}
+            variant="contained"
+          >
             Analyze
           </Button>
         </div>
@@ -77,24 +72,6 @@ export const ApplicationInventory = () => {
             columns={columns}
             isLoading={isApplicationsLoading}
             data={applicationData || []}
-            options={{
-              padding: 'dense',
-              pageSize: 100,
-              emptyRowsWhenPaging: false,
-              search: false,
-            }}
-            emptyContent={
-              <div className={classes.empty}>
-                No data was added yet,&nbsp;
-                <Link to="https://backstage.io/">learn how to add data</Link>.
-              </div>
-            }
-          />
-          <Table
-            title="Application TaskGroups"
-            columns={taskGroupColumns}
-            isLoading={isTaskGroupsApplicationsLoading}
-            data={taskGroupsData || []}
             options={{
               padding: 'dense',
               pageSize: 100,

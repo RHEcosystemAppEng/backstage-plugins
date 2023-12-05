@@ -32,33 +32,18 @@ export const applicationColumns: TableColumn[] = [
     highlight: true,
   },
   {
-    title: 'Business Service',
-    field: 'businessService',
-    highlight: true,
-  },
-  {
-    title: 'Repository Kind',
-    field: 'repository.kind',
-    highlight: true,
-  },
-  {
     title: 'Repository URL',
     field: 'repository.url',
     highlight: true,
   },
   {
-    title: 'Repository Branch',
-    field: 'repository.branch',
-    highlight: true,
-  },
-  {
-    title: 'Repository Path',
-    field: 'repository.path',
-    highlight: true,
-  },
-  {
-    title: 'Creating User',
+    title: 'Created By',
     field: 'createUser',
+    highlight: true,
+  },
+  {
+    title: 'Report Status',
+    field: 'reportStatus',
     highlight: true,
   },
   {
@@ -67,6 +52,9 @@ export const applicationColumns: TableColumn[] = [
     highlight: true,
     render: (rowData: any): React.ReactNode => {
       const app = rowData as Application;
+      if (app.reportStatus === 'Failed') {
+        return <span style={{ color: 'gray' }}>Report</span>;
+      }
       return <Link to={`${app.report}`}>Report</Link>;
     },
   },
@@ -127,8 +115,8 @@ export const taskColumns: TableColumn[] = [
     highlight: true,
   },
   {
-    title: 'Retries',
-    field: 'retries',
+    title: 'Create Time',
+    field: 'createTime',
     highlight: true,
   },
   {
