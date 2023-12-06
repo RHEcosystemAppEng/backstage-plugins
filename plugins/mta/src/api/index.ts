@@ -126,9 +126,15 @@ export class MtaApiClient implements MtaApiV1 {
       `${proxyUrl}/hub/applications`,
     )) as Application[];
 
-    for (const app of applications) {
-      app.report = `${mtaUiUrl}/hub/applications/${app.id}/bucket/windup/report/`;
-    }
+    const tasks = await Promise.all(
+      applications.map(app =>
+        this.getLatestTaskByApplication(app.id).then(task => {
+          app.reportStatus = task?.state || null;
+          app.report = `${mtaUiUrl}/hub/applications/${app.id}/bucket/windup/report/`;
+          return app;
+        }),
+      ),
+    );
 
     return applications;
   }
@@ -137,6 +143,31 @@ export class MtaApiClient implements MtaApiV1 {
     const proxyUrl = await this.getBaseUrl();
 
     return (await this.fetcher(`${proxyUrl}/hub/taskgroups`)) as TaskGroup[];
+  }
+
+  private async getLatestTaskByApplication(
+    applicationID: number,
+  ): Promise<Task | null> {
+    const proxyUrl = await this.getBaseUrl();
+    const tasks = (await this.fetcher(`${proxyUrl}/hub/tasks`)) as Task[];
+
+    // Filter tasks by application name
+    const filteredTasks = tasks.filter(
+      task => task.application.id === applicationID,
+    );
+
+    if (filteredTasks.length === 0) {
+      return null; // No tasks found for the specified application
+    }
+
+    // Sort tasks by the terminated property in descending order (latest first)
+    filteredTasks.sort(
+      (a, b) =>
+        new Date(b.terminated).getTime() - new Date(a.terminated).getTime(),
+    );
+
+    // Return the latest task
+    return filteredTasks[0];
   }
 
   async getTasks() {
