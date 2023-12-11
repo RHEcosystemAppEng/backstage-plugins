@@ -12,6 +12,17 @@ The Migration Toolkit Applications(MTA) plugin displays the information about yo
 
 ### Configuration
 
+To get the MTA token from a MTA installation that uses keycloak, run the following command for example:
+
+```console
+curl -k \
+  -d "client_id=mta-ui" \
+  -d "username=<username>" \
+  -d 'password=<password>' \
+  -d "grant_type=password" \
+  "https://mta-openshift-mta.apps.rhdh-dev01.kni.syseng.devcluster.openshift.com/auth/realms/mta/protocol/openid-connect/token" | jq -r '.access_token'
+```
+
 1. Set the desired MTA server configuration in the `app-config.yaml` file as follows:
 
 ```
