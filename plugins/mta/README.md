@@ -28,16 +28,35 @@ curl -k \
 1. Set the desired MTA server configuration in the `app-config.yaml` file as follows:
 
 ```
+  '/mta/api':
+    target: 'https://mta-openshift-mta.apps.rhdh-dev01.kni.syseng.devcluster.openshift.com'
+    allowedMethods: ['GET', 'POST', 'PUT']
+    allowedHeaders: ['Authorization', 'XMLHttpRequest']
+    headers:
+      X-Requested-With: 'XMLHttpRequest'
+      Authorization: 'Bearer <MTA TOKEN>'
+    changeOrigin: true
+    # Change to "false" in case of using self hosted mta instance with a self-signed certificate
+    secure: false
 
 ```
 
-2. Enable an additional tab on the entity view page in `packages/app/src/components/catalog/EntityPage.tsx`:
+2. How to Run it
+
+   **Start Front End:** - go to the 'plugins' directory, then go into 'mta'. - Execute the command `yarn start`.
+   **Open New Terminal and from Main Directory:**
+
+   **Start Backend:**
+
+   - Execute the command `yarn workspace backend start`.
+
+3. Enable an additional tab on the entity view page in `packages/app/src/components/catalog/EntityPage.tsx`:
 
    ```tsx title="packages/app/src/components/catalog/EntityPage.tsx"
 
    ```
 
-3. Annotate your entity with the following annotations:
+4. Annotate your entity with the following annotations:
 
    ```yaml title="catalog-info.yaml"
    metadata:
