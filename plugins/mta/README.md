@@ -2,6 +2,8 @@
 
 The Migration Toolkit Applications(MTA) plugin displays the information about your application migration details in your Backstage application.
 
+![img.png](img.png)
+
 ### Installation
 
 1. Install the MTA plugin using the following command:
